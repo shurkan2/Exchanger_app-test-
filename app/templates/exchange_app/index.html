@@ -14,7 +14,7 @@
                 <div class="card-header text-center">
                     <h3>Конвертер валют </h3>
                 </div>
-                <form id="form" class="p-3" action='' method="POST"> <!--- Надо что-то прикрутить к action?--->
+                <form id="form" class="p-3" action='{% url 'exchange_post' %}' method="POST"> <!--- Надо что-то прикрутить к action?--->
                     {% csrf_token %}
                     <div class="form-row">
                         <div class="form-group col-md-4 mb-0">
@@ -51,7 +51,7 @@
                         </div>
                     {% endif %}
                     <div class="submit-btn mt-7">
-                        <button type="submit" class="btn custom-btn">Рассчитать</button>
+                        <button type="submit" class="btn custom-btn" {% if currencies %} value="{{ currencies }}" {% endif %}>Рассчитать</button>
                     </div>
                 </form>
             </div>
