@@ -1,10 +1,13 @@
 from django.shortcuts import render, redirect
 import requests
+from django.core.paginator import Paginator
 
+API_URL = "https://v6.exchangerate-api.com/v6/0f4f6bd40a93f62532b34f0c/latest/USD"
+API_URL2 = "https://restcountries.com/v3.1/all?fields=name,flags,currencies"
 
 def exchange_get(request):
 
-    response = requests.get("https://v6.exchangerate-api.com/v6/0f4f6bd40a93f62532b34f0c/latest/USD").json()
+    response = requests.get(API_URL).json()
     currencies = response.get('conversion_rates')
 
     context = {
@@ -15,7 +18,7 @@ def exchange_get(request):
 
 def exchange_post(request):
     if request.method == 'POST':
-        response = requests.get("https://v6.exchangerate-api.com/v6/0f4f6bd40a93f62532b34f0c/latest/USD").json()
+        response = requests.get(API_URL).json()
         currencies = response.get('conversion_rates')
 
         from_amount = float(request.POST.get('from-amount'))
@@ -36,3 +39,55 @@ def exchange_post(request):
 
 
     return redirect('exchange_get')
+
+def parce_countries(countries, currencies) -> list:
+    parsed_countries = []
+
+    for country in countries[0]:
+        official_name = country['name']['official']
+
+        flag_url = country['flags']['png']
+
+        currency_code = ''
+        for e in list(country['currencies'].keys()):
+            currency_code = e
+            break
+        if currency_code == '':
+            continue
+
+        currency_symbol = country['currencies'][currency_code]['symbol']
+
+        parsed_country = {
+            'official': official_name,
+            'flags': flag_url,
+            'currencies': currency_code,
+            'symbol': currency_symbol,
+            'rate': currencies[currency_symbol]
+        }
+        parsed_countries.append(parsed_country)
+
+    return parsed_countries
+
+def courses_table(request):
+    response = requests.get(API_URL).json()
+    currencies = response.get('conversion_rates')
+
+    print(f"{currencies=}")
+
+    countries = dict(parce_countries(countries = requests.get(API_URL2).json(), currencies=currencies))
+
+    print(f"{countries}")
+
+    items_per_page = int(request.GET.get('items_per_page', 10))
+    sorted_currencies = sorted(countries.items())
+
+    paginator = Paginator(sorted_currencies, items_per_page)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        'countries': page_obj,
+        'items_per_page': items_per_page
+    }
+
+    return render(request, 'exchange_app/courses_table.html', context)
