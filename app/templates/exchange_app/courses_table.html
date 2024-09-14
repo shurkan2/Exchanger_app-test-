@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
 <div class="container-fluid d-flex flex-column h-100">
     <!-- Слайдер -->
     <div class="slider-container" style="flex-basis: 15%; display: flex; justify-content: center; align-items: center;">
@@ -16,8 +17,8 @@
             <div class="currency-card">
                 <img src="{{ country.flags }}" class="card-img-top flag-img" alt="Flag of {{ country.name }}">
                 <div class="card-body text-center">
-                    <h5 class="card-title">{{ country.name }}</h5>
-                    <p class="card-text">1 USD = {{ country.rate }} {{ country.currencies }} ({{ country.symbol }})</p>
+                    <h5 class="card-title"> <font color="#ff0000">{{ country.name }}</font></h5>
+                    <p class="card-text"><font color="#ff0000">1 USD = {{ country.rate }} {{ country.currencies }} ({{ country.symbol }})</font></p>
                 </div>
             </div>
         {% endfor %}
