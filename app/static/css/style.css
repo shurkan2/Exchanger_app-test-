@@ -45,15 +45,75 @@ body {
     border-color: rgb(100, 216, 237);
 }
 
-@media (min-width: 481px) {
+@media (min-width: 48px) {
     .card {
-        max-width: 1000px;
-        min-width: 700px;
+        max-width: 100px;
+        min-width: 70px;
     }
 }
 
-@media (max-width: 480px) {
-    .card {
-        max-width: 1000px;
-    }
+
+/* Общие настройки */
+body, html {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.container-fluid {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+/* Слайдер */
+.slider-wrapper {
+    width: 300px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.custom-range {
+    width: 100%;
+}
+
+/* Карточки */
+.card-container {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 колонки одинаковой ширины */
+    gap: 50px; /* Пробел между карточками */
+    padding: 15px; /* Внутренние отступы для контейнера */
+    flex: 1 1 auto; /* Позволяет контейнеру занимать оставшееся пространство */
+    overflow-y: auto; /* Скролл при переполнении */
+}
+.currency-card {
+    width: 200px;  /* Фиксированный размер карточки */
+    height: 300px; /* Фиксированная высота карточки */
+    margin: 10px;
+    background-color: #f8f9fa;
+    border: 100px solid #ddd;
+    border-radius: 50px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Тень карточки */
+    color: rgb(255, 255, 255);
+}
+
+.flag-img {
+    width: 100%;
+    height: 200px;  /* Задаем фиксированную высоту изображения флага */
+    object-fit: cover;  /* Растягиваем изображение флага по размеру контейнера */
+}
+
+/* Пагинация */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

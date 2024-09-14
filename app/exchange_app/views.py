@@ -75,8 +75,6 @@ def courses_table(request):
 
     countries = parce_countries(countries = requests.get(API_URL2).json(), currencies=currencies)
 
-    print(f"{countries=}")
-
     items_per_page = int(request.GET.get('items_per_page', 10))
     sorted_currencies = sorted(countries, key=lambda x: x['name'])
 

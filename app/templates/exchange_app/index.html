@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    
     {% if error %}
     <div class="alert alert-danger">
         {{ error }}
@@ -14,7 +13,7 @@
                 <div class="card-header text-center">
                     <h3>Конвертер валют </h3>
                 </div>
-                <form id="form" class="p-3" action='{% url 'exchange_post' %}' method="POST"> <!--- Надо что-то прикрутить к action?--->
+                <form id="form" class="p-3" action='{% url 'exchange_post' %}' method="POST">
                     {% csrf_token %}
                     <div class="form-row">
                         <div class="form-group col-md-4 mb-0">
@@ -42,8 +41,8 @@
                     {% if converted_amount %}
                         <div class="card col-6 p-0 m-auto">
                             <div class="card-header text-center">
-                                    <h5>Отдаем <b>{{ from_curr }}</b> Получаем
-                                        <b>{{ to_curr }}</b></h5>
+                                <h5>Отдаем <b>{{ from_curr }}</b> Получаем
+                                    <b>{{ to_curr }}</b></h5>
                             </div>
                             <div class="card-body">
                                 {{ converted_amount }}
@@ -54,10 +53,10 @@
                         <button type="submit" class="btn custom-btn" {% if currencies %} value="{{ currencies }}" {% endif %}>Рассчитать</button>
                     </div>
                 </form>
+                <div class="text-center mt-3">
+                    <a href="{% url 'courses_table' %}" class="btn btn-primary">Открыть таблицу курсов</a>
+                </div>
             </div>
         </div>
     </div>
-    
-    
 {% endblock %}
-

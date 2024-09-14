@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid d-flex flex-column h-100">
+    <!-- Слайдер -->
+    <div class="slider-container" style="flex-basis: 15%; display: flex; justify-content: center; align-items: center;">
+        <div class="slider-wrapper">
+            <label for="itemsRange">Элементов на странице: <span id="rangeValue">{{ items_per_page }}</span></label>
+            <input type="range" class="custom-range" id="itemsRange" min="5" max="50" step="5" value="{{ items_per_page }}" oninput="updateItemsPerPage(this.value)">
+        </div>
+    </div>
+
+    <!-- Карточки -->
+    <div class="card-container" style="flex-basis: 70%; overflow-y: auto; display: flex; flex-wrap: wrap; justify-content: center;">
+        {% for country in countries %}
+            <div class="currency-card">
+                <img src="{{ country.flags }}" class="card-img-top flag-img" alt="Flag of {{ country.name }}">
+                <div class="card-body text-center">
+                    <h5 class="card-title">{{ country.name }}</h5>
+                    <p class="card-text">1 USD = {{ country.rate }} {{ country.currencies }} ({{ country.symbol }})</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Пегинация -->
+    <div class="pagination-container" style="flex-basis: 15%; display: flex; justify-content: center; align-items: center;">
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                {% if countries.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1&items_per_page={{ items_per_page }}" aria-label="First">
+                            <span aria-hidden="true">&laquo;&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ countries.previous_page_number }}&items_per_page={{ items_per_page }}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+
+                {% for num in countries.paginator.page_range %}
+                    <li class="page-item {% if countries.number == num %}active{% endif %}">
+                        <a class="page-link" href="?page={{ num }}&items_per_page={{ items_per_page }}">{{ num }}</a>
+                    </li>
+                {% endfor %}
+
+                {% if countries.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ countries.next_page_number }}&items_per_page={{ items_per_page }}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ countries.paginator.num_pages }}&items_per_page={{ items_per_page }}" aria-label="Last">
+                            <span aria-hidden="true">&raquo;&raquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<script>
+    function updateItemsPerPage(value) {
+        document.getElementById('rangeValue').innerText = value;
+        window.location.href = '?items_per_page=' + value;  // Автоматическая перезагрузка страницы при изменении слайдера
+    }
+</script>
+{% endblock %}
