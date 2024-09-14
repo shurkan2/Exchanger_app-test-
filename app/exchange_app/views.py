@@ -43,7 +43,7 @@ def exchange_post(request):
 def parce_countries(countries, currencies) -> list:
     parsed_countries = []
 
-    for country in countries[0]:
+    for country in countries:
         official_name = country['name']['official']
 
         flag_url = country['flags']['png']
@@ -52,17 +52,18 @@ def parce_countries(countries, currencies) -> list:
         for e in list(country['currencies'].keys()):
             currency_code = e
             break
-        if currency_code == '':
+        if currencies.get(currency_code, 0) == 0:
+            print(f'{official_name} is Not OK')
             continue
 
         currency_symbol = country['currencies'][currency_code]['symbol']
 
         parsed_country = {
-            'official': official_name,
+            'name': official_name,
             'flags': flag_url,
             'currencies': currency_code,
             'symbol': currency_symbol,
-            'rate': currencies[currency_symbol]
+            'rate': currencies[currency_code]
         }
         parsed_countries.append(parsed_country)
 
@@ -72,14 +73,12 @@ def courses_table(request):
     response = requests.get(API_URL).json()
     currencies = response.get('conversion_rates')
 
-    print(f"{currencies=}")
+    countries = parce_countries(countries = requests.get(API_URL2).json(), currencies=currencies)
 
-    countries = dict(parce_countries(countries = requests.get(API_URL2).json(), currencies=currencies))
-
-    print(f"{countries}")
+    print(f"{countries=}")
 
     items_per_page = int(request.GET.get('items_per_page', 10))
-    sorted_currencies = sorted(countries.items())
+    sorted_currencies = sorted(countries, key=lambda x: x['name'])
 
     paginator = Paginator(sorted_currencies, items_per_page)
     page_number = request.GET.get('page')
