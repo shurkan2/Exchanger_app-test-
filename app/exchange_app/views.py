@@ -5,11 +5,12 @@ import requests
 def exchange(request):
 
     response = requests.get("https://v6.exchangerate-api.com/v6/0f4f6bd40a93f62532b34f0c/latest/USD").json()
-    currencies = response.get('conversion_rates', {})
+    currencies = response.get('conversion_rates')
 
-    context = {
-        'currencies': currencies
-    }
+    if request.method == 'GET':
+        context = {
+            'currencies': currencies
+        }
 
 
     if request.method == 'POST':
@@ -23,16 +24,17 @@ def exchange(request):
 
                 converted_amount = round((currencies[to_curr] / currencies[from_curr]) * from_amount, 2)
 
-                context.update({
+                context = {
                     'from_curr': from_curr,
                     'to_curr': to_curr,
                     'from_amount': from_amount,
-                    'converted_amount': converted_amount
-                })
+                    'converted_amount': converted_amount,
+                    'currencies': currencies
+                }
 
             except ValueError:
-                context['error'] = "Некорректное значение суммы."
+                context = {'error': "Некорректное значение суммы."}
         else:
-            context['error'] = "Пожалуйста, заполните все поля."
+            context = {'error' : "Пожалуйста, заполните все поля."}
 
     return render(request=request, template_name='exchange_app/index.html', context=context)
