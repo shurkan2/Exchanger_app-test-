@@ -1,0 +1,25 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 — страница не найдена</title>
+    <link rel="stylesheet" href="{% static 'css/404.css' %}">
+</head>
+<body class="not-found-page">
+    <main class="not-found">
+        <img
+            class="not-found__image"
+            src="{% static 'img/404_page_not_found.png' %}"
+            alt="404 — страница не найдена"
+            width="900"
+            height="auto"
+        >
+        <a href="{% url 'exchange_get' %}" class="not-found__btn">
+            <span class="not-found__btn-glow"></span>
+            <span class="not-found__btn-text">← Вернуться обратно</span>
+        </a>
+    </main>
+</body>
+</html>

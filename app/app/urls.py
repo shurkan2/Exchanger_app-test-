@@ -14,11 +14,21 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf import settings
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
+
+from exchange_app.views import page_not_found
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('exchange_app.urls'))
+    path('', include('exchange_app.urls')),
 ]
+
+handler404 = 'exchange_app.views.page_not_found'
+
+if settings.DEBUG:
+    urlpatterns += [
+        re_path(r'^(?!admin/).+', page_not_found),
+    ]

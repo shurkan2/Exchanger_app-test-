@@ -2,6 +2,10 @@ from django.shortcuts import render, redirect
 import requests
 
 
+def page_not_found(request, exception=None):
+    return render(request, '404.html', status=404)
+
+
 def exchange_get(request):
 
     response = requests.get("https://v6.exchangerate-api.com/v6/0f4f6bd40a93f62532b34f0c/latest/USD").json()
